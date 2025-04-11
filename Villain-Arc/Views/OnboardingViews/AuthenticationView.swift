@@ -12,6 +12,10 @@ struct AuthenticationView: View {
     @State private var password: String = ""
     @FocusState private var passwordFocused: Bool
     
+    private func signIn() {
+        AuthManager.shared.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password)
+    }
+    
     var body: some View {
         VStack(spacing: 15) {
             Spacer()
@@ -39,13 +43,6 @@ struct AuthenticationView: View {
             Text("-Or-")
                 .foregroundStyle(.white)
             
-//            Button {
-//                
-//            } label: {
-//                Label("Email/Password", systemImage: "envelope.fill")
-//                    .signInButtonStyle()
-//            }
-            
             TextField("Email", text: $email)
                 .emailPasswordButtonStyle()
                 .submitLabel(.next)
@@ -57,6 +54,9 @@ struct AuthenticationView: View {
                 .emailPasswordButtonStyle()
                 .focused($passwordFocused)
                 .submitLabel(.done)
+                .onSubmit {
+                    signIn()
+                }
             
             HStack {
                 Spacer()
@@ -72,7 +72,7 @@ struct AuthenticationView: View {
             Spacer()
             
             Button {
-                
+                signIn()
             } label: {
                 Text("Sign In")
                     .continueButtonStyle()

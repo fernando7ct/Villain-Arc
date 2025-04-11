@@ -34,6 +34,9 @@ struct OnboardingView: View {
             .safeAreaPadding(.top, 30)
             .animation(.smooth, value: currentPage)
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
