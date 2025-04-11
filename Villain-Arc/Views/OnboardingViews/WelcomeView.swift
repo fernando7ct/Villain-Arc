@@ -20,18 +20,11 @@ struct WelcomeView: View {
                     currentPage = .authentication
                 } label: {
                     Text("Continue")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .padding(.vertical, 13)
-                        .padding(.horizontal, 50)
-                        .foregroundColor(.black)
-                        .background(.white)
-                        .buttonStyle(.bordered)
-                        .clipShape(.capsule)
+                        .continueButtonStyle()
                 }
                 .sensoryFeedback(.impact, trigger: currentPage)
             }
-            .safeAreaPadding(.bottom, 90)
+            .safeAreaPadding(.bottom, 120)
     }
 }
 

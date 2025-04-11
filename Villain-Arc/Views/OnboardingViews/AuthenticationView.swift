@@ -8,10 +8,21 @@
 import SwiftUI
 
 struct AuthenticationView: View {
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @FocusState private var passwordFocused: Bool
+    
     var body: some View {
         VStack(spacing: 15) {
             Spacer()
-
+            
+            Button {
+                
+            } label: {
+                Label("Sign in with Apple", systemImage: "apple.logo")
+                    .signInButtonStyle()
+            }
+            
             Button {
                 
             } label: {
@@ -25,27 +36,53 @@ struct AuthenticationView: View {
                 .signInButtonStyle()
             }
             
-            Button {
-                
-            } label: {
-                Label("Sign in with Apple", systemImage: "apple.logo")
-                    .signInButtonStyle()
-            }
-            
             Text("-Or-")
                 .foregroundStyle(.white)
             
-            Button {
+//            Button {
+//                
+//            } label: {
+//                Label("Email/Password", systemImage: "envelope.fill")
+//                    .signInButtonStyle()
+//            }
+            
+            TextField("Email", text: $email)
+                .emailPasswordButtonStyle()
+                .submitLabel(.next)
+                .onSubmit {
+                    passwordFocused = true
+                }
+            
+            SecureField("Password", text: $password)
+                .emailPasswordButtonStyle()
+                .focused($passwordFocused)
+                .submitLabel(.done)
+            
+            HStack {
+                Spacer()
                 
-            } label: {
-                Label("Email/Password", systemImage: "envelope.fill")
-                    .signInButtonStyle()
+                Button {
+                    
+                } label: {
+                    Text("Forgot Password?")
+                        .foregroundStyle(.red)
+                }
             }
             
             Spacer()
+            
+            Button {
+                
+            } label: {
+                Text("Sign In")
+                    .continueButtonStyle()
+            }
+            .disabled(email.isEmpty || password.isEmpty)
+            .opacity(email.isEmpty || password.isEmpty ? 0.5 : 1)
+            
             Spacer()
         }
-        .safeAreaPadding(.horizontal, 30)
+        .padding(.horizontal, 30)
     }
 }
 

@@ -10,12 +10,9 @@ import SwiftUI
 struct Background: View {
     var body: some View {
         ZStack {
-            // Two options, must discuss which is better
+            // Two options, "background1" or "background2"
             Image("background1")
                 .resizable()
-            
-//            Image("background2")
-//                .resizable()
             
             Color.black.opacity(0.1)
         }

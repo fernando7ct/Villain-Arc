@@ -22,6 +22,7 @@ struct OnboardingView: View {
                 Text("Villain Arc")
                     .font(.system(size: 52, weight: .bold))
                     .foregroundStyle(.white)
+                
                 if currentPage == .welcome {
                     WelcomeView(currentPage: $currentPage)
                         .transition(.blurReplace)
