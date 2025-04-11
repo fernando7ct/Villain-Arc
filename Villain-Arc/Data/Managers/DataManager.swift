@@ -1,0 +1,68 @@
+//
+//  DataManager.swift
+//  Villain-Arc
+//
+//  Created by Fernando Caudillo Tafoya on 4/11/25.
+//
+
+import SwiftUI
+import SwiftData
+import FirebaseAuth
+import FirebaseFirestore
+
+class DataManager {
+    @AppStorage("userLoggedIn") var userLoggedIn: Bool = false
+    static let shared = DataManager()
+    
+    let db = Firestore.firestore()
+    
+    func createUser(firstName: String, lastName: String, username: String, birthday: Date, context: ModelContext) {
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        let newUser = User(id: userID, firstName: firstName, lastName: lastName, username: username, dateJoined: Date.startOfDay(), birthday: birthday)
+        context.insert(newUser)
+        print("New User saved to SwiftData")
+        
+        let userData = newUser.toDictionary()
+        db.collection("users").document(userID).setData(userData)
+        print("New User saved to Firebase")
+        
+        db.collection("usernames").document(userID).setData(["username": username])
+        print("Username saved to Firebase 'usernames' collection")
+        
+        userLoggedIn = true
+    }
+    
+    func downloadUserData(context: ModelContext) {
+        guard let userID = Auth.auth().currentUser?.uid else { return }
+        db.collection("users").document(userID).getDocument { document, error in
+            if let document = document, document.exists {
+                if let data = document.data(),
+                   let firstName = data["firstName"] as? String,
+                   let lastName = data["lastName"] as? String,
+                   let userName = data["username"] as? String,
+                   let dateJoind = data["dateJoined"] as? Timestamp,
+                   let birthday = data["birthday"] as? Timestamp {
+                    let newUser = User(id: userID, firstName: firstName, lastName: lastName, username: userName, dateJoined: dateJoind.dateValue(), birthday: birthday.dateValue())
+                    context.insert(newUser)
+                    print("User data downloaded from Firebase")
+                    // Download other data
+                    self.userLoggedIn = true
+                }
+            }
+        }
+    }
+    
+    func fetchAllUsernames(completion: @escaping ([String]) -> Void) {
+        db.collection("usernames").getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching usernames: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            
+            let usernames = snapshot?.documents.compactMap { $0.data()["username"] as? String } ?? []
+            print("Usernames fetched from firebase.")
+            completion(usernames)
+        }
+    }
+}

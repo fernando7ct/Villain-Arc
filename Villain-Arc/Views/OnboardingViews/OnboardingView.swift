@@ -8,11 +8,12 @@
 import SwiftUI
 
 enum OnboardingPage {
-    case welcome, authentication, emailPass, profile
+    case welcome, authentication, profile
 }
 
 struct OnboardingView: View {
-    @State var currentPage: OnboardingPage = .welcome
+    @State private var currentPage: OnboardingPage = .welcome
+    @State private var opacity: Double = 0
     
     var body: some View {
         ZStack {
@@ -22,17 +23,29 @@ struct OnboardingView: View {
                 Text("Villain Arc")
                     .font(.system(size: 52, weight: .bold))
                     .foregroundStyle(.white)
+                    .opacity(opacity)
                 
                 if currentPage == .welcome {
                     WelcomeView(currentPage: $currentPage)
                         .transition(.blurReplace)
+                        .opacity(opacity)
                 } else if currentPage == .authentication {
-                    AuthenticationView()
+                    AuthenticationView(currentPage: $currentPage)
+                        .transition(.blurReplace)
+                } else {
+                    UserQuestionsView()
                         .transition(.blurReplace)
                 }
             }
             .safeAreaPadding(.top, 30)
             .animation(.smooth, value: currentPage)
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    withAnimation(.linear(duration: 1)) {
+                        self.opacity = 1
+                    }
+                }
+            }
         }
         .onTapGesture {
             hideKeyboard()

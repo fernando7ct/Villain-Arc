@@ -20,7 +20,7 @@ struct SignInButtonModifer: ViewModifier {
     }
 }
 
-struct EmailPasswordButtonModifier: ViewModifier {
+struct EmailPasswordTextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.title2)
@@ -52,15 +52,30 @@ struct ContinueButtonModifier: ViewModifier {
     }
 }
 
+struct UserInfoTextFieldModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.title)
+            .fontWeight(.semibold)
+            .foregroundStyle(.white)
+            .tint(.white)
+            .transition(.blurReplace)
+            .autocorrectionDisabled()
+    }
+}
+
 extension View {
     func signInButtonStyle() -> some View {
         self.modifier(SignInButtonModifer())
     }
-    func emailPasswordButtonStyle() -> some View {
-        self.modifier(EmailPasswordButtonModifier())
+    func emailPasswordTextFieldStyle() -> some View {
+        self.modifier(EmailPasswordTextFieldModifier())
     }
     func continueButtonStyle() -> some View {
         self.modifier(ContinueButtonModifier())
+    }
+    func userInfoTextFieldStyle() -> some View {
+        self.modifier(UserInfoTextFieldModifier())
     }
 }
 
@@ -71,3 +86,34 @@ extension View {
     }
 }
 #endif
+
+extension String {
+    var isValidEmail: Bool {
+        // This regex is a commonly used pattern for basic email validation.
+        // Note: It won't capture every possible valid email address, but it works for most use cases.
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let predicate = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return predicate.evaluate(with: self)
+    }
+}
+
+extension Date {
+    static func fromComponents(month: Int, day: Int, year: Int) -> Date {
+        var components = DateComponents()
+        components.month = month
+        components.day = day
+        components.year = year
+        return Calendar.current.date(from: components)!
+    }
+    static func fromDate(date: Date = Date.startOfDay(), months: Int = 0, days: Int = 0, years: Int = 0) -> Date {
+        var components = DateComponents()
+        components.month = months
+        components.day = days
+        components.year = years
+        return Calendar.current.date(byAdding: components, to: date)!
+    }
+    
+    static func startOfDay() -> Date {
+        return Calendar.current.startOfDay(for: Date())
+    }
+}

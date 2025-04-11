@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import SwiftData
 
 @main
 struct Villain_ArcApp: App {
@@ -16,7 +17,8 @@ struct Villain_ArcApp: App {
     
     var body: some Scene {
         WindowGroup {
-            OnboardingView()
+            ContentView()
         }
+        .modelContainer(for: [User.self])
     }
 }

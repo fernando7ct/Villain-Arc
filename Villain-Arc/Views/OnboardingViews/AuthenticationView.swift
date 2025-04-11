@@ -8,12 +8,33 @@
 import SwiftUI
 
 struct AuthenticationView: View {
+    @Environment(\.modelContext) private var context
     @State private var email: String = ""
     @State private var password: String = ""
     @FocusState private var passwordFocused: Bool
+    @Binding var currentPage: OnboardingPage
+    @State private var showWrongPasswordAlert = false
+    
+    var invalidPassword: Bool {
+        password.count < 8
+    }
+    var invalidEmail: Bool {
+        return !email.trimmingCharacters(in: .whitespacesAndNewlines).isValidEmail
+    }
     
     private func signIn() {
-        AuthManager.shared.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password)
+        AuthManager.shared.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password) { result in
+            switch result {
+            case .error:
+                return
+            case .newUser:
+                currentPage = .profile
+            case .wrongPassword:
+                showWrongPasswordAlert = true
+            case .existingUser:
+                DataManager.shared.downloadUserData(context: context)
+            }
+        }
     }
     
     var body: some View {
@@ -44,14 +65,14 @@ struct AuthenticationView: View {
                 .foregroundStyle(.white)
             
             TextField("Email", text: $email)
-                .emailPasswordButtonStyle()
+                .emailPasswordTextFieldStyle()
                 .submitLabel(.next)
                 .onSubmit {
                     passwordFocused = true
                 }
             
             SecureField("Password", text: $password)
-                .emailPasswordButtonStyle()
+                .emailPasswordTextFieldStyle()
                 .focused($passwordFocused)
                 .submitLabel(.done)
                 .onSubmit {
@@ -66,6 +87,7 @@ struct AuthenticationView: View {
                 } label: {
                     Text("Forgot Password?")
                         .foregroundStyle(.red)
+                        .fontWeight(.semibold)
                 }
             }
             
@@ -77,19 +99,26 @@ struct AuthenticationView: View {
                 Text("Sign In")
                     .continueButtonStyle()
             }
-            .disabled(email.isEmpty || password.isEmpty)
-            .opacity(email.isEmpty || password.isEmpty ? 0.5 : 1)
+            .disabled(invalidEmail || invalidPassword)
+            .opacity(invalidEmail || invalidPassword ? 0.5 : 1)
             
             Spacer()
         }
         .padding(.horizontal, 30)
+        .alert("Incorrect Password", isPresented: $showWrongPasswordAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text("The password you entered is incorrect. Please try again.")
+        }
     }
 }
 
 #Preview {
+    @Previewable @State var currentPage: OnboardingPage = .authentication
+    
     ZStack {
         Background()
         
-        AuthenticationView()
+        AuthenticationView(currentPage: $currentPage)
     }
 }
