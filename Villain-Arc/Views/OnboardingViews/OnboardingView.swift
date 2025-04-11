@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum OnboardingPage {
-    case welcome, authentication, signIn, singUp
+    case welcome, authentication, emailPass, profile
 }
 
 struct OnboardingView: View {
@@ -24,14 +24,14 @@ struct OnboardingView: View {
                     .foregroundStyle(.white)
                 if currentPage == .welcome {
                     WelcomeView(currentPage: $currentPage)
-                        .transition(.move(edge: .leading))
+                        .transition(.blurReplace)
                 } else if currentPage == .authentication {
                     AuthenticationView()
-                        .transition(.move(edge: .trailing))
+                        .transition(.blurReplace)
                 }
             }
             .safeAreaPadding(.top, 30)
-            .animation(.easeInOut, value: currentPage)
+            .animation(.smooth, value: currentPage)
         }
     }
 }

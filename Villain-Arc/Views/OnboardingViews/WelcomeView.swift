@@ -28,10 +28,10 @@ struct WelcomeView: View {
                         .background(.white)
                         .buttonStyle(.bordered)
                         .clipShape(.capsule)
-                        .padding(.bottom, 70)
                 }
                 .sensoryFeedback(.impact, trigger: currentPage)
             }
+            .safeAreaPadding(.bottom, 90)
     }
 }
 
