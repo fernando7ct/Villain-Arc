@@ -8,40 +8,39 @@
 import SwiftUI
 
 struct WelcomeView: View {
+    @Binding var currentPage: OnboardingPage
+    
     var body: some View {
-        ZStack {
-            Background()
-            
             VStack {
-                Text("Villain Arc")
-                    .font(.system(size: 52, weight: .semibold))
-                    .foregroundStyle(.white)
-                
-                Spacer()
-                
                 // Missing carousel displaying images of app features
                 
                 Spacer()
                 
                 Button {
-                    
+                    currentPage = .authentication
                 } label: {
                     Text("Continue")
-                        .font(.title2)
+                        .font(.title3)
                         .fontWeight(.semibold)
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 30)
+                        .padding(.vertical, 13)
+                        .padding(.horizontal, 50)
                         .foregroundColor(.black)
                         .background(.white)
                         .buttonStyle(.bordered)
                         .clipShape(.capsule)
+                        .padding(.bottom, 70)
                 }
+                .sensoryFeedback(.impact, trigger: currentPage)
             }
-            .padding(.vertical, 30)
-        }
     }
 }
 
 #Preview {
-    WelcomeView()
+    @Previewable @State var currentPage: OnboardingPage = .welcome
+    
+    ZStack {
+        Background()
+        
+        WelcomeView(currentPage: $currentPage)
+    }
 }
