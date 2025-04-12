@@ -15,7 +15,7 @@ struct ContentView: View {
             if userLoggedIn {
                 
             } else {
-                OnboardingView()
+                WelcomeView()
                     .transition(.blurReplace)
             }
         }

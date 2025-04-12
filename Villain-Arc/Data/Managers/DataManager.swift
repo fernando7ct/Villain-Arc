@@ -16,6 +16,29 @@ class DataManager {
     
     let db = Firestore.firestore()
     
+    func checkUserDataComplete(completion: @escaping (Bool) -> Void) {
+        guard let userID = Auth.auth().currentUser?.uid else {
+            completion(false)
+            return
+        }
+        db.collection("users").document(userID).getDocument { document, error in
+            if let document = document, document.exists {
+                if let data = document.data(),
+                   let _ = data["firstName"] as? String,
+                   let _ = data["lastName"] as? String,
+                   let _ = data["username"] as? String,
+                   let _ = data["dateJoined"] as? Timestamp,
+                   let _ = data["birthday"] as? Timestamp {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
     func createUser(firstName: String, lastName: String, username: String, birthday: Date, context: ModelContext) {
         guard let userID = Auth.auth().currentUser?.uid else { return }
         let newUser = User(id: userID, firstName: firstName, lastName: lastName, username: username, dateJoined: Date.startOfDay(), birthday: birthday)

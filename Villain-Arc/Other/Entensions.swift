@@ -21,25 +21,6 @@ struct SignInButtonModifer: ViewModifier {
     }
 }
 
-struct EmailPasswordTextFieldModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.title2)
-            .fontWeight(.semibold)
-            .foregroundStyle(.white)
-            .padding(.leading)
-            .textFieldStyle(.plain)
-            .frame(height: 55)
-            .frame(maxWidth: .infinity)
-            .background {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .stroke(.white.opacity(0.25), style: .init(lineWidth: 3, lineCap: .round, lineJoin: .round))
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .tint(.white)
-    }
-}
-
 struct ContinueButtonModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -68,9 +49,6 @@ struct UserInfoTextFieldModifier: ViewModifier {
 extension View {
     func signInButtonStyle() -> some View {
         self.modifier(SignInButtonModifer())
-    }
-    func emailPasswordTextFieldStyle() -> some View {
-        self.modifier(EmailPasswordTextFieldModifier())
     }
     func continueButtonStyle() -> some View {
         self.modifier(ContinueButtonModifier())
