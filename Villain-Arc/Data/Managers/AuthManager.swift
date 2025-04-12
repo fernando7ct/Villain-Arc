@@ -26,7 +26,6 @@ class AuthManager: NSObject {
     private var currentNonce: String?
     private var completionHandler: ((AuthenticationResult) -> Void)? = nil
     
-    
     func signIn(email: String, password: String, completion: @escaping (AuthenticationResult) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { signUpResult, signUpError in
             if let signUpError = signUpError {
@@ -119,10 +118,10 @@ class AuthManager: NSObject {
             }
             self.checkUserDataComplete { complete in
                 if complete {
-                    print("Successfully signed in with \(credential) and user data complete")
+                    print("Successfully signed in with \(credential) and user data complete.")
                     completion(.existingUser)
                 } else {
-                    print("Successfully signed in with \(credential) but user data not complete")
+                    print("Successfully signed in with \(credential) but user data not complete.")
                     completion(.newUser)
                 }
             }
