@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FDD5014B2DAA03E900A27AF6 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = FDD5014A2DAA03E900A27AF6 /* GoogleSignIn */; };
+		FDD5014D2DAA03E900A27AF6 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FDD5014C2DAA03E900A27AF6 /* GoogleSignInSwift */; };
 		FDEED76B2DA8A08B00D11F1E /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = FDEED76A2DA8A08B00D11F1E /* FirebaseAnalytics */; };
 		FDEED76D2DA8A08B00D11F1E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = FDEED76C2DA8A08B00D11F1E /* FirebaseAuth */; };
 		FDEED76F2DA8A08B00D11F1E /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = FDEED76E2DA8A08B00D11F1E /* FirebaseFirestore */; };
@@ -16,9 +18,22 @@
 		FDEED7582DA89F4400D11F1E /* Villain-Arc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Villain-Arc.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FDD62C232DAA01EB00FB8EA8 /* Exceptions for "Villain-Arc" folder in "Villain-Arc" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FDEED7572DA89F4400D11F1E /* Villain-Arc */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FDEED75A2DA89F4400D11F1E /* Villain-Arc */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FDD62C232DAA01EB00FB8EA8 /* Exceptions for "Villain-Arc" folder in "Villain-Arc" target */,
+			);
 			path = "Villain-Arc";
 			sourceTree = "<group>";
 		};
@@ -29,7 +44,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDD5014D2DAA03E900A27AF6 /* GoogleSignInSwift in Frameworks */,
 				FDEED76B2DA8A08B00D11F1E /* FirebaseAnalytics in Frameworks */,
+				FDD5014B2DAA03E900A27AF6 /* GoogleSignIn in Frameworks */,
 				FDEED76D2DA8A08B00D11F1E /* FirebaseAuth in Frameworks */,
 				FDEED76F2DA8A08B00D11F1E /* FirebaseFirestore in Frameworks */,
 			);
@@ -77,6 +94,8 @@
 				FDEED76A2DA8A08B00D11F1E /* FirebaseAnalytics */,
 				FDEED76C2DA8A08B00D11F1E /* FirebaseAuth */,
 				FDEED76E2DA8A08B00D11F1E /* FirebaseFirestore */,
+				FDD5014A2DAA03E900A27AF6 /* GoogleSignIn */,
+				FDD5014C2DAA03E900A27AF6 /* GoogleSignInSwift */,
 			);
 			productName = "Villain-Arc";
 			productReference = FDEED7582DA89F4400D11F1E /* Villain-Arc.app */;
@@ -108,6 +127,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FDEED7692DA8A08B00D11F1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				FDD501492DAA03E900A27AF6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FDEED7592DA89F4400D11F1E /* Products */;
@@ -269,6 +289,8 @@
 				DEVELOPMENT_TEAM = 6SVFNFHMZZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Villain-Arc/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Villain Arc";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -303,6 +325,8 @@
 				DEVELOPMENT_TEAM = 6SVFNFHMZZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Villain-Arc/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Villain Arc";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -351,6 +375,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		FDD501492DAA03E900A27AF6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 		FDEED7692DA8A08B00D11F1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -362,6 +394,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FDD5014A2DAA03E900A27AF6 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FDD501492DAA03E900A27AF6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		FDD5014C2DAA03E900A27AF6 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FDD501492DAA03E900A27AF6 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		FDEED76A2DA8A08B00D11F1E /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FDEED7692DA8A08B00D11F1E /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

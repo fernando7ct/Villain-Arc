@@ -14,26 +14,25 @@ struct AuthenticationView: View {
     @FocusState private var passwordFocused: Bool
     @Binding var currentPage: OnboardingPage
     @State private var showWrongPasswordAlert = false
+    @State private var showPasswordResetAlert = false
+    @State private var failedSignInAlert = false
     
     var invalidPassword: Bool {
-        password.count < 8
+        password.count < 8 || password.contains(" ")
     }
     var invalidEmail: Bool {
         return !email.trimmingCharacters(in: .whitespacesAndNewlines).isValidEmail
     }
-    
-    private func signIn() {
-        AuthManager.shared.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password) { result in
-            switch result {
-            case .error:
-                return
-            case .newUser:
-                currentPage = .profile
-            case .wrongPassword:
-                showWrongPasswordAlert = true
-            case .existingUser:
-                DataManager.shared.downloadUserData(context: context)
-            }
+    private func signIn(result: AuthenticationResult) {
+        switch result {
+        case .error:
+            failedSignInAlert = true
+        case .newUser:
+            currentPage = .profile
+        case .wrongPassword:
+            showWrongPasswordAlert = true
+        case .existingUser:
+            DataManager.shared.downloadUserData(context: context)
         }
     }
     
@@ -42,21 +41,37 @@ struct AuthenticationView: View {
             Spacer()
             
             Button {
-                
+                Task {
+                    do {
+                        try await AuthManager.shared.signInApple { result in
+                            signIn(result: result)
+                        }
+                    } catch {
+                        signIn(result: .error)
+                    }
+                }
             } label: {
-                Label("Sign in with Apple", systemImage: "apple.logo")
+                Label("Continue with Apple", systemImage: "apple.logo")
                     .signInButtonStyle()
             }
             
             Button {
-                
+                Task {
+                    do {
+                        try await AuthManager.shared.signInGoogle { result in
+                            signIn(result: result)
+                        }
+                    } catch {
+                        signIn(result: .error)
+                    }
+                }
             } label: {
                 HStack {
                     Image("google.logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 19)
-                    Text("Sign in with Google")
+                    Text("Continue with Google")
                 }
                 .signInButtonStyle()
             }
@@ -66,6 +81,8 @@ struct AuthenticationView: View {
             
             TextField("Email", text: $email)
                 .emailPasswordTextFieldStyle()
+                .autocorrectionDisabled(true)
+                .textInputAutocapitalization(.never)
                 .submitLabel(.next)
                 .onSubmit {
                     passwordFocused = true
@@ -75,26 +92,33 @@ struct AuthenticationView: View {
                 .emailPasswordTextFieldStyle()
                 .focused($passwordFocused)
                 .submitLabel(.done)
-                .onSubmit {
-                    signIn()
-                }
             
             HStack {
                 Spacer()
                 
                 Button {
-                    
+                    AuthManager.shared.resetPassword(email: email.trimmingCharacters(in: .whitespacesAndNewlines)) { error in
+                        if error == nil {
+                            showPasswordResetAlert = true
+                        }
+                    }
                 } label: {
                     Text("Forgot Password?")
                         .foregroundStyle(.red)
                         .fontWeight(.semibold)
                 }
+                .disabled(invalidEmail)
+                .opacity(invalidEmail ? 0.5 : 1)
             }
             
             Spacer()
             
             Button {
-                signIn()
+                Task {
+                    AuthManager.shared.signIn(email: email.trimmingCharacters(in: .whitespacesAndNewlines), password: password) { result in
+                        signIn(result: result)
+                    }
+                }
             } label: {
                 Text("Sign In")
                     .continueButtonStyle()
@@ -110,6 +134,17 @@ struct AuthenticationView: View {
         } message: {
             Text("The password you entered is incorrect. Please try again.")
         }
+        .alert("Password Reset", isPresented: $showPasswordResetAlert) {
+            Button("Ok", role: .cancel) { }
+        } message: {
+            Text("A password reset email has been sent to your email address.")
+        }
+        .alert("Failed to Sign In", isPresented: $failedSignInAlert) {
+            Button("Ok", role: .cancel) { }
+        } message: {
+            Text("Failed to sign in. Please try again later.")
+        }
+
     }
 }
 

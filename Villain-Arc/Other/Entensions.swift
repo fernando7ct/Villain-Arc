@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct SignInButtonModifer: ViewModifier {
     func body(content: Content) -> some View {
@@ -79,13 +80,11 @@ extension View {
     }
 }
 
-#if canImport(UIKit)
 extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
-#endif
 
 extension String {
     var isValidEmail: Bool {
@@ -115,5 +114,27 @@ extension Date {
     
     static func startOfDay() -> Date {
         return Calendar.current.startOfDay(for: Date())
+    }
+}
+
+extension UIApplication {
+    @MainActor
+    class func topViewController(controller: UIViewController? = nil) -> UIViewController? {
+        let controller = controller ?? UIApplication.shared.keyWindow?.rootViewController
+        
+        if let navigationController = controller as? UINavigationController {
+            return topViewController(controller: navigationController.visibleViewController)
+        }
+        
+        if let tabBarController = controller as? UITabBarController {
+            if let selected = tabBarController.selectedViewController {
+                return topViewController(controller: selected)
+            }
+        }
+        
+        if let presented = controller?.presentedViewController {
+            return topViewController(controller: presented)
+        }
+        return controller
     }
 }

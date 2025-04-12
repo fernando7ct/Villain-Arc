@@ -37,10 +37,10 @@ struct OnboardingView: View {
                         .transition(.blurReplace)
                 }
             }
-            .safeAreaPadding(.top, 30)
+            .padding(.top, 30)
             .animation(.smooth, value: currentPage)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.linear(duration: 1)) {
                         self.opacity = 1
                     }
