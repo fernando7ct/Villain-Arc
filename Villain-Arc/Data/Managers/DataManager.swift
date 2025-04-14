@@ -12,6 +12,7 @@ import FirebaseFirestore
 
 class DataManager {
     @AppStorage("userLoggedIn") var userLoggedIn: Bool = false
+    @AppStorage("showWelcomeView") var showWelcomeView: Bool = true
     static let shared = DataManager()
     
     let db = Firestore.firestore()
@@ -41,18 +42,16 @@ class DataManager {
     
     func createUser(firstName: String, lastName: String, username: String, birthday: Date, context: ModelContext) {
         guard let userID = Auth.auth().currentUser?.uid else { return }
-        let newUser = User(id: userID, firstName: firstName, lastName: lastName, username: username, dateJoined: Date.startOfDay(), birthday: birthday)
+        let newUser = User(id: userID, firstName: firstName, lastName: lastName, username: username, dateJoined: Date(), birthday: birthday)
         context.insert(newUser)
         print("New User saved to SwiftData")
         
         let userData = newUser.toDictionary()
         db.collection("users").document(userID).setData(userData)
         print("New User saved to Firebase")
-        
-        db.collection("usernames").document(userID).setData(["username": username])
-        print("Username saved to Firebase 'usernames' collection")
-        
+                
         userLoggedIn = true
+        showWelcomeView = true
     }
     
     func downloadUserData(context: ModelContext) {
@@ -76,7 +75,7 @@ class DataManager {
     }
     
     func fetchAllUsernames(completion: @escaping ([String]) -> Void) {
-        db.collection("usernames").getDocuments { snapshot, error in
+        db.collection("users").getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching usernames: \(error.localizedDescription)")
                 completion([])

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct WelcomeView: View {
     @Environment(\.modelContext) private var context
-    @State private var welcomeView: Bool = true
+    @AppStorage("showWelcomeView") var showWelcomeView: Bool = true
     @State private var opacity: Double = 0
     @State private var failedSignInAlert = false
     
@@ -19,7 +19,7 @@ struct WelcomeView: View {
         case .error:
             failedSignInAlert = true
         case .newUser:
-            welcomeView = false
+            showWelcomeView = false
         case .existingUser:
             DataManager.shared.downloadUserData(context: context)
         }
@@ -55,7 +55,7 @@ struct WelcomeView: View {
                     .foregroundStyle(.white)
                     .opacity(opacity)
                 
-                if welcomeView {
+                if showWelcomeView {
                     Spacer()
                     VStack(spacing: 15) {
                         GoogleSignInButton()
@@ -74,7 +74,7 @@ struct WelcomeView: View {
                 }
             }
             .padding(.vertical, 30)
-            .animation(.smooth, value: welcomeView)
+            .animation(.smooth, value: showWelcomeView)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     withAnimation(.linear(duration: 1)) {
