@@ -14,10 +14,10 @@ struct Background: View {
             Image("background1")
                 .resizable()
             
-            Color.black.opacity(0.1)
+            Color.black.opacity(0.2)
         }
         .compositingGroup()
-        .blur(radius: 50, opaque: true)
+        .blur(radius: 60, opaque: true)
         .ignoresSafeArea()
     }
 }

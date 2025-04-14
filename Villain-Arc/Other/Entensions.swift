@@ -39,7 +39,6 @@ struct UserInfoTextFieldModifier: ViewModifier {
         content
             .font(.title)
             .fontWeight(.semibold)
-            .foregroundStyle(.white)
             .tint(.white)
             .transition(.blurReplace)
             .autocorrectionDisabled()

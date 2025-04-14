@@ -52,7 +52,6 @@ struct WelcomeView: View {
             VStack {
                 Text("Villain Arc")
                     .font(.system(size: 52, weight: .bold))
-                    .foregroundStyle(.white)
                     .opacity(opacity)
                 
                 if showWelcomeView {
@@ -117,4 +116,5 @@ struct WelcomeView: View {
 
 #Preview {
     WelcomeView()
+        .environment(\.colorScheme, .dark)
 }

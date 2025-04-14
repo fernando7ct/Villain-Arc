@@ -127,6 +127,7 @@ struct UserQuestionsView: View {
     private func lastNameView() -> some View {
         TextField("Last Name", text: $lastName)
             .userInfoTextFieldStyle()
+            .textInputAutocapitalization(.words)
             .focused($lastNameFocusState)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -171,5 +172,6 @@ struct UserQuestionsView: View {
         Background()
         
         UserQuestionsView()
+            .environment(\.colorScheme, .dark)
     }
 }
