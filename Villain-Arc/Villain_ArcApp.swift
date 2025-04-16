@@ -20,6 +20,6 @@ struct Villain_ArcApp: App {
             ContentView()
                 .environment(\.colorScheme, .dark)
         }
-        .modelContainer(for: [User.self])
+        .modelContainer(for: [User.self, Workout.self, WorkoutExercise.self, ExerciseSet.self])
     }
 }

@@ -56,7 +56,7 @@ struct UserQuestionsView: View {
         if profileStep < 3 && !nextButtonDisabled {
             profileStep += 1
         } else if profileStep == 3 {
-            DataManager.shared.createUser(firstName: firstName, lastName: lastName, username: username.lowercased(), birthday: birthday, context: context)
+            DataManager.shared.createUser(firstName: firstName.trimmingCharacters(in: .whitespacesAndNewlines), lastName: lastName.trimmingCharacters(in: .whitespacesAndNewlines), username: username.lowercased(), birthday: birthday, context: context)
         }
     }
     

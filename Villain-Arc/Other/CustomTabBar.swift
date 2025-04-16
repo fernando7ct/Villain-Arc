@@ -27,6 +27,7 @@ struct CustomTabBar: View {
                                 Text(tab.title)
                                     .font(.caption)
                                     .fontWeight(.semibold)
+                                    .lineLimit(1)
                             }
                         }
                         .foregroundStyle(activeTab == tab ? .black : .gray)

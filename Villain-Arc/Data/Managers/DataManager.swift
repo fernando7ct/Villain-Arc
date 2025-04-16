@@ -10,6 +10,7 @@ import SwiftData
 import FirebaseAuth
 import FirebaseFirestore
 
+@MainActor
 class DataManager {
     @AppStorage("userLoggedIn") var userLoggedIn: Bool = false
     @AppStorage("showWelcomeView") var showWelcomeView: Bool = true
