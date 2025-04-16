@@ -24,18 +24,11 @@ enum Tab: String, CaseIterable {
         }
     }
     
-    var extraButton: Bool {
-        switch self {
-        case .workout, .run, .profile: true
-        case .health, .nutrition: false
-        }
-    }
-    
     var systemImage: String {
         switch self {
-        case .workout, .run: "plus"
+        case .workout, .run, .nutrition: "plus"
         case .profile: "gear"
-        default: ""
+        case .health: "slider.horizontal.3"
         }
     }
 }

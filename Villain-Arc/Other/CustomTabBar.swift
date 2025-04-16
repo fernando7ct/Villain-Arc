@@ -25,11 +25,11 @@ struct CustomTabBar: View {
                                 .frame(width: 30, height: 30)
                             if activeTab == tab {
                                 Text(tab.title)
-                                    .font(.subheadline)
+                                    .font(.caption)
                                     .fontWeight(.semibold)
                             }
                         }
-                        .foregroundStyle(activeTab == tab ? .white : .gray)
+                        .foregroundStyle(activeTab == tab ? .black : .gray)
                         .padding(.vertical, 2)
                         .padding(.leading, 12)
                         .padding(.trailing, 17)
@@ -37,7 +37,7 @@ struct CustomTabBar: View {
                         .background {
                             if activeTab == tab {
                                 Capsule()
-                                    .fill(.gray.opacity(0.4))
+                                    .fill(.white)
                                     .matchedGeometryEffect(id: "ACTIVETAB", in: animation)
                             }
                         }
@@ -49,19 +49,17 @@ struct CustomTabBar: View {
             .frame(height: 45)
             .background(.black.opacity(0.1), in: .capsule)
             
-            if activeTab.extraButton {
-                Button {
-                    
-                } label: {
-                    Image(systemName: activeTab.systemImage)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .frame(width: 40, height: 40)
-                        .foregroundStyle(.white)
-                        .background(.black.opacity(0.1), in: .circle)
-                }
-                .transition(.blurReplace)
+            Button {
+                
+            } label: {
+                Image(systemName: activeTab.systemImage)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(.white)
+                    .background(.black.opacity(0.1), in: .circle)
             }
+            .transition(.blurReplace)
         }
         .padding(.bottom, 8)
         .animation(.smooth(duration: 0.3, extraBounce: 0), value: activeTab)

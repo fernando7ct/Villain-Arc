@@ -11,13 +11,13 @@ struct Background: View {
     var body: some View {
         ZStack {
             // Two options, "background1" or "background2"
-            Image("background1")
+            Image(.background2)
                 .resizable()
             
-            Color.black.opacity(0.2)
+            Color.black.opacity(0.4)
         }
         .compositingGroup()
-        .blur(radius: 60, opaque: true)
+        .blur(radius: 70, opaque: true)
         .ignoresSafeArea()
     }
 }
