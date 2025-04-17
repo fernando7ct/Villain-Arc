@@ -9,7 +9,7 @@ import SwiftUI
 import Foundation
 
 struct ExerciseDetailView: View {
-    @Binding var exercise: WorkoutExercise
+    @State var exercise: WorkoutExercise = WorkoutExercise(id: "", name: "", musclesTargeted: [], repRange: "", notes: "", index: 1, sets: [])
     
     // Timer
     @State private var timeElapsed: Int = 0
@@ -45,20 +45,20 @@ struct ExerciseDetailView: View {
                     }
 
                     // ── editable rows ────────────────────────
-                    ForEach($exercise.sets) { $set in
-                        let prevString = "\(Int(set.weight))x\(set.reps)"
+                    ForEach($exercise.sets) { set in
+                        let prevString = "\((set.weight))x\(set.reps)"
 
                         HStack(spacing: 8) {
-                            Text("\(set.setNumber)").frame(width: 50)
+                            Text("\(set.index)").frame(width: 50)
 
                             Text(prevString)
                                 .frame(width: 80)
 
-                            TextField("lbs", value: $set.weight, format: .number)
+                            TextField("lbs", value: set.weight, format: .number)
                                 .frame(width: 60)
                                 .textFieldStyle(.roundedBorder)
 
-                            TextField("reps", value: $set.reps, format: .number)
+                            TextField("reps", value: set.reps, format: .number)
                                 .frame(width: 60)
                                 .textFieldStyle(.roundedBorder)
                         }
@@ -67,9 +67,9 @@ struct ExerciseDetailView: View {
                     // Add‑Set button
                     Button {
                         let next = exercise.sets.count + 1
-                        exercise.sets.append(
-                            ExerciseSet(setNumber: next, weight: 0, reps: 0)
-                        )
+//                        exercise.sets.append(
+//                            ExerciseSet(setNumber: next, weight: 0, reps: 0)
+//                        )
                         timerRunning = true
                     } label: {
                         Label("Add Set", systemImage: "plus")
@@ -85,9 +85,9 @@ struct ExerciseDetailView: View {
                     // ensure a new exercise starts with three blank sets
                     if exercise.sets.isEmpty {
                         for i in 1...3 {
-                            exercise.sets.append(
-                                ExerciseSet(setNumber: i, weight: 0, reps: 0)
-                            )
+//                            exercise.sets.append(
+//                                //ExerciseSet(setNumber: i, weight: 0, reps: 0)
+//                            )
                         }
                     }
                     timeElapsed = 0            // reset
@@ -118,18 +118,8 @@ struct ExerciseDetailView: View {
 
 // ── preview ───────────────────────────────────────────────────
 #Preview {
-    @Previewable @State var exercise = WorkoutExercise(
-        id: UUID().uuidString,
-        name: "Bench Press DB",
-        sets: (1...8).map { i in
-            ExerciseSet(
-                setNumber: i,
-                weight: 95.0 + Double(i - 1) * 10,   // 95, 105, 115 …
-                reps: max(12 - (i - 1) * 2, 3)       // 12, 10, 8 …
-            )
-        }
-    )
+    // @Previewable @State var exercise =
 
-    ExerciseDetailView(exercise: $exercise)
+    ExerciseDetailView()
         .environment(\.colorScheme, .dark)
 }

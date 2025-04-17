@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct WorkoutTab: View {
+    @Query private var workouts: [Workout]
+    
     var body: some View {
         ZStack {
             Background()
             
             VStack {
-                Text("Workout Tab")
+                List(workouts) { workout in
+                    Text(workout.title)
+                }
+                .scrollContentBackground(.hidden)
             }
         }
     }
@@ -21,4 +27,5 @@ struct WorkoutTab: View {
 
 #Preview {
     WorkoutTab()
+        .environment(\.colorScheme, .dark)
 }

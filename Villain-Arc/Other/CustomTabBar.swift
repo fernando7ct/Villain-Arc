@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct CustomTabBar: View {
+    @Environment(\.modelContext) private var context
     @Binding var activeTab: Tab
     @Namespace private var animation
+    @State private var startWorkout = false
     
     var body: some View {
         HStack(spacing: 12) {
@@ -51,7 +53,9 @@ struct CustomTabBar: View {
             .background(.black.opacity(0.1), in: .capsule)
             
             Button {
-                
+                if activeTab == .workout {
+                    startWorkout = true
+                }
             } label: {
                 Image(systemName: activeTab.systemImage)
                     .font(.title3)
@@ -64,6 +68,9 @@ struct CustomTabBar: View {
         }
         .padding(.bottom, 8)
         .animation(.smooth(duration: 0.3, extraBounce: 0), value: activeTab)
+        .fullScreenCover(isPresented: $startWorkout) {
+            WorkoutView()
+        }
     }
 }
 

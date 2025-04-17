@@ -12,13 +12,30 @@ import SwiftData
 class Workout {
     var id: String = UUID().uuidString
     var title: String = ""
-    var isComplete: Bool = false
-    var exercises: [WorkoutExercise] = []
+    var startTime: Date = Date()
+    var endTime: Date = Date()
+    var notes: String = ""
+    @Relationship(deleteRule: .cascade) var exercises: [WorkoutExercise] = []
     
-    init(id: String, title: String, isComplete: Bool, exercises: [WorkoutExercise]) {
+    init(id: String = UUID().uuidString, title: String, startTime: Date, endTime: Date, notes: String, exercises: [WorkoutExercise]) {
         self.id = id
         self.title = title
-        self.isComplete = isComplete
+        self.startTime = startTime
+        self.endTime = endTime
+        self.notes = notes
         self.exercises = exercises
+    }
+    
+    init(workout: ActiveWorkout) {
+        self.id = workout.id
+        self.title = workout.title
+        self.startTime = workout.startTime
+        self.endTime = workout.endTime
+        self.notes = workout.notes
+        self.exercises = workout.exercises
+            .enumerated()
+            .map { index, exer in
+                WorkoutExercise(exercise: exer, index: index)
+            }
     }
 }
