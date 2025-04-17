@@ -14,9 +14,8 @@ class WorkoutExercise {
     var name: String = ""
     var sets: [ExerciseSet] = []
     
-    init(id: String, name: String = "", sets: [ExerciseSet] = []) {
+    init(id: String, name: String) {
         self.id = id
         self.name = name
     }
 }
-		
