@@ -6,120 +6,104 @@
 
 
 import SwiftUI
-import Foundation
 
 struct ExerciseDetailView: View {
-    @State var exercise: WorkoutExercise = WorkoutExercise(id: "", name: "", musclesTargeted: [], repRange: "", notes: "", index: 1, sets: [])
+    var workout: ActiveWorkout
+    @Binding var exercise: TempExercise
     
-    // Timer
-    @State private var timeElapsed: Int = 0
-    @State private var timerRunning: Bool = false
-    private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
     var body: some View {
-        ZStack {
-            Background()
-
-            ScrollView {
-                VStack(alignment: .center, spacing: 15) {
-                    // Timer
-                    Text(String(format: "%02d:%02d", timeElapsed / 60, timeElapsed % 60))
-                        .font(.system(size: 48, weight: .bold, design: .monospaced))
-                        .padding(.bottom, 10)
-                        .onReceive(timer) { _ in
-                            if timerRunning { timeElapsed += 1 }
-                        }
-
-                    // Exercise title
+        ScrollView(showsIndicators: false) {
+            HStack {
+                VStack(alignment: .leading) {
                     Text(exercise.name)
-                        .font(.largeTitle).bold()
-                        .multilineTextAlignment(.center)
-                        .padding(.bottom, 20)
-
-                    // Header
-                    HStack(spacing: 8) {
-                        Text("SET").bold().frame(width: 50)
-                        Text("PREV").bold().frame(width: 80)
-                        Text("LBS").bold().frame(width: 60)
-                        Text("REPS").bold().frame(width: 60)
-                    }
-
-                    // ── editable rows ────────────────────────
-                    ForEach($exercise.sets) { set in
-                        let prevString = "\((set.weight))x\(set.reps)"
-
-                        HStack(spacing: 8) {
-                            Text("\(set.index)").frame(width: 50)
-
-                            Text(prevString)
-                                .frame(width: 80)
-
-                            TextField("lbs", value: set.weight, format: .number)
-                                .frame(width: 60)
-                                .textFieldStyle(.roundedBorder)
-
-                            TextField("reps", value: set.reps, format: .number)
-                                .frame(width: 60)
-                                .textFieldStyle(.roundedBorder)
-                        }
-                    }
-
-                    // Add‑Set button
-                    Button {
-                        let next = exercise.sets.count + 1
-//                        exercise.sets.append(
-//                            ExerciseSet(setNumber: next, weight: 0, reps: 0)
-//                        )
-                        timerRunning = true
-                    } label: {
-                        Label("Add Set", systemImage: "plus")
-                            .frame(maxWidth: .infinity)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .padding(.vertical, 8)
+                        .font(.title)
+                        .fontWeight(.semibold)
                 }
-                .padding(.top, 40)
-                .padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .onAppear {
-                    // ensure a new exercise starts with three blank sets
-                    if exercise.sets.isEmpty {
-                        for i in 1...3 {
-//                            exercise.sets.append(
-//                                //ExerciseSet(setNumber: i, weight: 0, reps: 0)
-//                            )
-                        }
-                    }
-                    timeElapsed = 0            // reset
-                    timerRunning = true        // start timer immediately when view appears
+                Spacer()
+                if workout.resting {
+                    Text(workout.endOfRest, style: .timer)
+                        .font(.title2)
+                        .padding()
+                        .background(.black.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                 }
-            } // end ScrollView
-
-            // Bottom‑pinned “Log” button
-            .safeAreaInset(edge: .bottom) {
-                Button {
-                    
-                    timerRunning = false
-                } label: {
-                    Text("LOG")
-                        .font(.title3.bold())
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 60)
-                        .background(Color.brown)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 4)
-                }
-                .padding(.horizontal)
             }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .heavyBlurScroll()
+            
+            HStack {
+                Text("Set")
+                    .padding(.horizontal, 7)
+                Text("Reps")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Weight")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Previous")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text("")
+                    .frame(width: 55)
+            }
+            .font(.headline)
+            .foregroundStyle(.secondary)
+            .heavyBlurScroll()
+            
+            ForEach(Array($exercise.sets.enumerated()), id: \.element.id) { index, set in
+                HStack {
+                    Text(index + 1, format: .number)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .padding(.leading)
+                        .padding(.trailing, 20)
+                    TextField("Reps", value: set.reps, format: .number)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    TextField("Weight", value: set.weight, format: .number)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                    Text("8x125")
+                        .lineLimit(1)
+                        .padding(.trailing)
+                        .fontWeight(.semibold)
+                    Button {
+                        
+                    } label: {
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(.green)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .padding(.horizontal)
+                    }
+                }
+                .padding(.bottom)
+                .heavyBlurScroll()
+            }
+            Button {
+                exercise.sets.append(TempSet())
+            } label: {
+                Label("Add Set", systemImage: "plus")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical)
+                    .background(.black.opacity(0.4), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+            .padding(.horizontal)
+            .heavyBlurScroll()
+            
+            Text("")
+                .frame(height: 50)
         }
     }
 }
 
-// ── preview ───────────────────────────────────────────────────
 #Preview {
-    // @Previewable @State var exercise =
-
-    ExerciseDetailView()
-        .environment(\.colorScheme, .dark)
+    @Previewable @State var exercise: TempExercise = TempExercise()
+    
+    ZStack {
+        Background()
+        
+        ExerciseDetailView(workout: ActiveWorkout(), exercise: $exercise)
+            .environment(\.colorScheme, .dark)
+    }
 }

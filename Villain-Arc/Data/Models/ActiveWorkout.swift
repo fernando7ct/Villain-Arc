@@ -78,7 +78,7 @@ import SwiftData
     var weight: Double = 0
     var complete: Bool = false
     
-    init(id: String, reps: Double, weight: Double, complete: Bool) {
+    init(id: String = UUID().uuidString, reps: Double = 0, weight: Double = 0, complete: Bool = false) {
         self.id = id
         self.reps = reps
         self.weight = weight

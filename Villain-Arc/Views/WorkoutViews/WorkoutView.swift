@@ -12,7 +12,7 @@ struct WorkoutView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var editingMode: Bool = false
-    @State private var activeExercise: TempExercise? = nil
+    @State private var selectedExerciseIndex: Int? = nil
     @State private var workout: ActiveWorkout = ActiveWorkout()
     
     init(existingWorkout: Workout? = nil) {
@@ -22,30 +22,61 @@ struct WorkoutView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Background()
-            
-            VStack {
-                header()
+        ScrollViewReader { scrollProxy in
+            ZStack(alignment: .bottom) {
+                Background()
+                
                 if !editingMode {
-                    TabView {
-                        ForEach(workout.exercises) { exercise in
-                            Text(exercise.name)
-                               
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(workout.exercises.indices, id: \.self) { idx in
+                                ExerciseDetailView(workout: workout, exercise: $workout.exercises[idx])
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(idx)
+                            }
                         }
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .scrollDisabled(!editingMode)
                 } else {
-                    List {
-                        ForEach(workout.exercises) { exercise in
-                            Text(exercise.name)
+                    ScrollView {
+                        VStack(spacing: 12) {
+                            ForEach(workout.exercises.indices, id: \.self) { idx in
+                                Button {
+                                    withAnimation {
+                                        selectedExerciseIndex = idx
+                                        editingMode = false
+                                    }
+                                } label: {
+                                    HStack {
+                                        Text(workout.exercises[idx].name)
+                                            .font(.headline)
+                                            .foregroundStyle(.primary)
+                                        Spacer()
+                                        Text(workout.exercises[idx].sets.map { "\($0.reps)x\($0.weight)" }.joined(separator: " • "))
+                                            .font(.subheadline)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(.black.opacity(0.1), in: RoundedRectangle(cornerRadius: 12))
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
                         }
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
                     }
-                    .scrollContentBackground(.hidden)
+                }
+                
+                bottomBar()
+            }
+            .onChange(of: selectedExerciseIndex) {
+                if let selectedExerciseIndex {
+                    withAnimation {
+                        scrollProxy.scrollTo(selectedExerciseIndex)
+                    }
                 }
             }
-            
-            bottomBar()
         }
     }
     
@@ -62,8 +93,7 @@ struct WorkoutView: View {
                     .foregroundStyle(.white)
                     .font(.title3)
                     .padding()
-                    .background(.black.opacity(0.2))
-                    .clipShape(.circle)
+                    .background(.black.opacity(0.4), in: .circle)
             }
             .buttonBorderShape(.circle)
             
@@ -78,10 +108,10 @@ struct WorkoutView: View {
                     .font(.title3)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 40)
-                    .background(.black.opacity(0.2))
-                    .clipShape(.capsule)
+                    .background(.black.opacity(0.4), in: .capsule)
                     .lineLimit(1)
             }
+            .buttonBorderShape(.capsule)
             
             Spacer()
             
@@ -93,8 +123,7 @@ struct WorkoutView: View {
                     .fontWeight(.semibold)
                     .font(.title3)
                     .padding()
-                    .background(.black.opacity(0.2))
-                    .clipShape(.circle)
+                    .background(.black.opacity(0.4), in: .circle)
             }
             .buttonBorderShape(.circle)
         }

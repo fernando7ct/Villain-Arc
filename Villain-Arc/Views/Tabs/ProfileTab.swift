@@ -68,23 +68,6 @@ struct ProfileTab: View {
 }
 
 #Preview {
-    ContentView()
+    ProfileTab()
         .environment(\.colorScheme, .dark)
-}
-
-struct blurScrollModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .scrollTransition { c, p in
-                c
-                    .blur(radius: p.isIdentity ? 0 : 2)
-                    .opacity(p.isIdentity ? 1 : 0.6)
-            }
-    }
-}
-
-extension View {
-    public func blurScroll() -> some View {
-        modifier(blurScrollModifier())
-    }
 }
