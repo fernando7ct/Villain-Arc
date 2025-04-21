@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct WorkoutView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var editingMode: Bool = false
     @State private var workout: ActiveWorkout = ActiveWorkout()
-    @State private var displayWorkoutSettingsSheet: Bool = true
+    @State private var displayWorkoutSettingsSheet: Bool = false
+    @State private var displayAddExerciseSheet: Bool = false
     
     init(existingWorkout: Workout? = nil) {
         if let existingWorkout {
@@ -54,9 +56,11 @@ struct WorkoutView: View {
             .toolbarBackgroundVisibility(.visible, for: .bottomBar)
             .sheet(isPresented: $displayWorkoutSettingsSheet) {
                 workoutSettingsView()
-                    .presentationDetents([.height(300)])
-                    .presentationCornerRadius(20)
-                    .presentationBackground(.ultraThinMaterial)
+                    .presentationDetents([.height(280)])
+                    .presentationCornerRadius(12)
+            }
+            .sheet(isPresented: $displayAddExerciseSheet) {
+                ExerciseSelectionView(workout: $workout)
             }
         }
     }
@@ -77,8 +81,7 @@ struct WorkoutView: View {
             .hSpacing(.leading)
             
             Button {
-                let count = workout.exercises.count + 1
-                workout.addExercise(TempExercise(name: "Exercise \(count)"))
+                displayAddExerciseSheet = true
             } label: {
                 Label("Exercise", systemImage: "plus")
                     .padding(.vertical, 10)
@@ -106,15 +109,21 @@ struct WorkoutView: View {
         VStack(spacing: 15) {
             TextField("Workout Title", text: $workout.title)
                 .padding()
-                .background(.black.opacity(0.1), in: .rect(cornerRadius: 12))
+                .background(.black.opacity(0.15), in: .rect(cornerRadius: 12))
+                .padding(.top)
             
             DatePicker("Start Time", selection: $workout.startTime, displayedComponents: .hourAndMinute)
-                .padding()
-                .background(.black.opacity(0.1), in: .rect(cornerRadius: 12))
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(.black.opacity(0.15), in: .rect(cornerRadius: 12))
+            DatePicker("End Time", selection: $workout.endTime, in: workout.startTime...Date(), displayedComponents: .hourAndMinute)
+                .padding(.horizontal)
+                .padding(.vertical, 10)
+                .background(.black.opacity(0.15), in: .rect(cornerRadius: 12))
             
             HStack(spacing: 20) {
                 Button {
-                    
+                    dismiss()
                 } label: {
                     Text("Cancel Workout")
                         .frame(maxWidth: .infinity)
@@ -123,9 +132,11 @@ struct WorkoutView: View {
                         .fontWeight(.semibold)
                         .background(.red, in: .rect(cornerRadius: 12))
                 }
+                .buttonBorderShape(.roundedRectangle(radius: 12))
                 
                 Button {
-                    
+                    workout.saveWorkout(modelContext)
+                    dismiss()
                 } label: {
                     Text("Save Workout")
                         .frame(maxWidth: .infinity)
@@ -134,15 +145,20 @@ struct WorkoutView: View {
                         .fontWeight(.semibold)
                         .background(.green, in: .rect(cornerRadius: 12))
                 }
+                .buttonBorderShape(.roundedRectangle(radius: 12))
+                .disabled(workout.title.isEmpty)
+                .opacity(workout.title.isEmpty ? 0.8 : 1)
             }
-            
-            Spacer()
-            
         }
         .padding()
+        .onAppear {
+            workout.endTime = Date()
+        }
+        .vSpacing(.top)
     }
 }
 
 #Preview {
     WorkoutView()
 }
+

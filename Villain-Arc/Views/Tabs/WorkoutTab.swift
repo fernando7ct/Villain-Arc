@@ -10,14 +10,13 @@ import SwiftData
 
 struct WorkoutTab: View {
     @Query private var workouts: [Workout]
-    @State private var workoutsDisplay: [Workout] = Workout.testingData
     @State private var startWorkout = false
     
     var body: some View {
         NavigationStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHStack {
-                    ForEach(workoutsDisplay) {
+                    ForEach(workouts) {
                         WorkoutListDisplayView(workout: $0)
                             .containerRelativeFrame(.horizontal)
                     }

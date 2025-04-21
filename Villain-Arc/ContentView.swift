@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("userLoggedIn") var userLoggedIn: Bool = true
+    @AppStorage("userLoggedIn") var userLoggedIn: Bool = false
     @State private var activeTab: Tab = .workout
     
     var body: some View {

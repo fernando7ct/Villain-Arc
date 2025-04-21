@@ -44,18 +44,18 @@ import SwiftData
     }
 }
 
-@Observable class TempExercise: Identifiable {
+class TempExercise: Identifiable {
     var id: String = UUID().uuidString
     var name: String = ""
-    var musclesTargeted: [String] = []
+    var muscleTargeted: String = ""
     var repRange: String = ""
     var notes: String = ""
     var sets: [TempSet] = []
     
-    init(id: String = UUID().uuidString, name: String = "", musclesTargeted: [String] = [], repRange: String = "", notes: String = "", sets: [TempSet] = []) {
+    init(id: String = UUID().uuidString, name: String = "", muscleTargeted: String = "", repRange: String = "", notes: String = "", sets: [TempSet] = []) {
         self.id = id
         self.name = name
-        self.musclesTargeted = musclesTargeted
+        self.muscleTargeted = muscleTargeted
         self.repRange = repRange
         self.notes = notes
         self.sets = sets
@@ -63,7 +63,7 @@ import SwiftData
     
     init(exercise: WorkoutExercise) {
         self.name = exercise.name
-        self.musclesTargeted = exercise.musclesTargeted
+        self.muscleTargeted = exercise.muscleTargeted
         self.repRange = exercise.repRange
         self.notes = exercise.notes
         self.sets = exercise.sets
@@ -72,7 +72,7 @@ import SwiftData
     }
 }
 
-@Observable class TempSet: Identifiable {
+class TempSet: Identifiable {
     var id: String = UUID().uuidString
     var reps: Double = 0
     var weight: Double = 0
