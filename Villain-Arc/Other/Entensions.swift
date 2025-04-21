@@ -9,39 +9,53 @@ import SwiftUI
 import UIKit
 
 struct SignInButtonModifer: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    
     func body(content: Content) -> some View {
         content
             .font(.title2)
-            .foregroundStyle(.black)
+            .foregroundStyle(colorScheme == .light ? .white : .black)
             .fontWeight(.semibold)
             .frame(height: 55)
             .frame(maxWidth: .infinity)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .background(colorScheme == .light ? .black : .white, in: .rect(cornerRadius: 12))
+            .padding(.horizontal, 30)
     }
 }
 
 struct ContinueButtonModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
     func body(content: Content) -> some View {
         content
-            .font(.title3)
+            .font(.title2)
             .fontWeight(.semibold)
             .padding(.vertical, 13)
             .padding(.horizontal, 50)
-            .foregroundColor(.black)
-            .background(.white)
-            .clipShape(.capsule)
+            .foregroundColor(colorScheme == .light ? .white : .black)
+            .background(colorScheme == .light ? .black : .white, in: .capsule)
     }
 }
 
 struct UserInfoTextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.title)
+            .font(.largeTitle)
             .fontWeight(.semibold)
-            .tint(.white)
-            .transition(.blurReplace)
             .autocorrectionDisabled()
+            .tint(.primary)
+    }
+}
+
+struct WorkoutBottomButtonModifier<S: InsettableShape>: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    let shape: S
+    
+    func body(content: Content) -> some View {
+        content
+            .foregroundStyle(colorScheme == .dark ? .white : .black)
+            .fontWeight(.bold)
+            .font(.title3)
+            .background(.ultraThinMaterial, in: shape)
     }
 }
 
@@ -54,6 +68,9 @@ extension View {
     }
     func userInfoTextFieldStyle() -> some View {
         self.modifier(UserInfoTextFieldModifier())
+    }
+    func workoutBottomButtonStyle<S: InsettableShape>(_ shape: S) -> some View {
+        modifier(WorkoutBottomButtonModifier(shape: shape))
     }
 }
 
@@ -143,5 +160,19 @@ extension View {
     }
     public func heavyBlurScroll() -> some View {
         modifier(heavyBlurScrollModifier())
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func hSpacing(_ alignment: Alignment) -> some View {
+        self
+            .frame(maxWidth: .infinity, alignment: alignment)
+    }
+    
+    @ViewBuilder
+    func vSpacing(_ alignment: Alignment) -> some View {
+        self
+            .frame(maxHeight: .infinity, alignment: alignment)
     }
 }

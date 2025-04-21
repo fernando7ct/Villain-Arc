@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserQuestionsView: View {
-    @Environment(\.modelContext) private var context
+    @Environment(\.modelContext) private var modelContext
     @State var profileStep: Int = 0
     @State var firstName: String = ""
     @State var lastName: String = ""
@@ -17,6 +17,7 @@ struct UserQuestionsView: View {
     @FocusState var firstNameFocusState: Bool
     @FocusState var lastNameFocusState: Bool
     @FocusState var usernameFocusState: Bool
+    @State var birthdaySelection: Bool = false
     @State private var existingUsernames: [String] = []
     
     var nextButtonDisabled: Bool {
@@ -56,28 +57,24 @@ struct UserQuestionsView: View {
         if profileStep < 3 && !nextButtonDisabled {
             profileStep += 1
         } else if profileStep == 3 {
-            DataManager.shared.createUser(firstName: firstName.trimmingCharacters(in: .whitespacesAndNewlines), lastName: lastName.trimmingCharacters(in: .whitespacesAndNewlines), username: username.lowercased(), birthday: birthday, context: context)
+            DataManager.shared.createUser(firstName: firstName.trimmingCharacters(in: .whitespacesAndNewlines), lastName: lastName.trimmingCharacters(in: .whitespacesAndNewlines), username: username.lowercased(), birthday: birthday, context: modelContext)
         }
     }
     
     var body: some View {
         VStack {
             Spacer()
-            switch profileStep {
-            case 0:
-                firstNameView()
-                    .transition(.blurReplace)
-            case 1:
-                lastNameView()
-                    .transition(.blurReplace)
-            case 2:
-                usernameView()
-                    .transition(.blurReplace)
-            case 3:
-                birthdayView()
-                    .transition(.blurReplace)
-            default: Text("")
+            Group {
+                switch profileStep {
+                case 0: firstNameView()
+                case 1: lastNameView()
+                case 2: usernameView()
+                case 3: birthdayView()
+                default: Text("")
+                }
             }
+            .transition(.blurReplace)
+            .padding(.horizontal)
             
             Spacer()
             
@@ -88,7 +85,7 @@ struct UserQuestionsView: View {
                     .continueButtonStyle()
             }
             .disabled(nextButtonDisabled)
-            .opacity(nextButtonDisabled ? 0.5 : 1)
+            .opacity(nextButtonDisabled ? 0.7 : 1)
             
             if profileStep > 0 {
                 Button {
@@ -101,8 +98,6 @@ struct UserQuestionsView: View {
                 .padding(.top)
             }
         }
-        .padding(.horizontal, 30)
-        .safeAreaPadding(.bottom, 40)
         .animation(.smooth, value: profileStep)
         .onAppear {
             DataManager.shared.fetchAllUsernames { usernames in
@@ -122,7 +117,7 @@ struct UserQuestionsView: View {
                 }
             }
     }
-
+    
     @ViewBuilder
     private func lastNameView() -> some View {
         TextField("Last Name", text: $lastName)
@@ -168,10 +163,9 @@ struct UserQuestionsView: View {
 }
 
 #Preview {
-    ZStack {
-        Background()
-        
+    VStack {
+        Text("Villain Arc")
+            .font(.system(size: 70, weight: .bold, design: .rounded))
         UserQuestionsView()
-            .environment(\.colorScheme, .dark)
     }
 }

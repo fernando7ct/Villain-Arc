@@ -18,7 +18,6 @@ struct Villain_ArcApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(\.colorScheme, .dark)
         }
         .modelContainer(for: [User.self, Workout.self, WorkoutExercise.self, ExerciseSet.self])
     }

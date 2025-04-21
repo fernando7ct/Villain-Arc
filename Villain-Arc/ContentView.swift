@@ -8,46 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    @AppStorage("userLoggedIn") var userLoggedIn: Bool = false
+    @AppStorage("userLoggedIn") var userLoggedIn: Bool = true
     @State private var activeTab: Tab = .workout
     
     var body: some View {
-        Group {
-            if userLoggedIn {
-                ZStack(alignment: .bottom) {
-                    TabView(selection: $activeTab) {
-                        WorkoutTab()
-                            .tag(Tab.workout)
-                            .toolbarVisibility(.hidden, for: .tabBar)
-                        
-                        HealthTab()
-                            .tag(Tab.health)
-                            .toolbarVisibility(.hidden, for: .tabBar)
-                        
-                        NutritionTab()
-                            .tag(Tab.nutrition)
-                            .toolbarVisibility(.hidden, for: .tabBar)
-                        
-                        RunTab()
-                            .tag(Tab.run)
-                            .toolbarVisibility(.hidden, for: .tabBar)
-                        
-                        ProfileTab()
-                            .tag(Tab.profile)
-                            .toolbarVisibility(.hidden, for: .tabBar)
+        if userLoggedIn {
+            TabView(selection: $activeTab) {
+                HealthTab()
+                    .tag(Tab.health)
+                    .tabItem {
+                        Label(Tab.health.rawValue, systemImage: Tab.health.systemImage)
                     }
-                    
-                    CustomTabBar(activeTab: $activeTab)
-                        .padding(.bottom)
-                }
-            } else {
-                WelcomeView()
+                
+                WorkoutTab()
+                    .tag(Tab.workout)
+                    .tabItem {
+                        Label(Tab.workout.rawValue, systemImage: Tab.workout.systemImage)
+                    }
+                
+                NutritionTab()
+                    .tag(Tab.nutrition)
+                    .tabItem {
+                        Label(Tab.nutrition.rawValue, systemImage: Tab.nutrition.systemImage)
+                    }
             }
+            .tint(.primary)
+        } else {
+            WelcomeView()
         }
     }
 }
 
 #Preview {
     ContentView()
-        .environment(\.colorScheme, .dark)
 }
