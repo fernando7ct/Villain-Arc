@@ -32,6 +32,8 @@ struct WelcomeView: View {
     }
     
     private func signInWithGoogle() {
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        impact.impactOccurred()
         Task {
             do {
                 try await AuthManager.shared.signInGoogle { result in
@@ -44,6 +46,8 @@ struct WelcomeView: View {
     }
     
     private func signInWithApple() {
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        impact.impactOccurred()
         Task {
             await AuthManager.shared.signInApple { result in
                 handleAuthResult(result)

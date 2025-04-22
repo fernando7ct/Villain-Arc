@@ -70,6 +70,13 @@ class TempExercise: Identifiable {
             .sorted { $0.index < $1.index }
             .map { TempSet(set: $0) }
     }
+    
+    init(exercise: Exercise) {
+        self.id = exercise.id
+        self.name = exercise.name
+        self.muscleTargeted = exercise.muscleTargeted
+        self.sets = [TempSet()]
+    }
 }
 
 class TempSet: Identifiable {

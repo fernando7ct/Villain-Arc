@@ -61,8 +61,11 @@ struct WorkoutView: View {
             }
             .sheet(isPresented: $displayAddExerciseSheet) {
                 ExerciseSelectionView(workout: $workout)
+                    .presentationDragIndicator(.visible)
+                    .padding(.top, 5)
             }
         }
+        .persistentSystemOverlays(.hidden)
     }
     
     @ViewBuilder
