@@ -61,14 +61,14 @@ See Villain Arc in action. This video walks you through creating an account, log
 -->
 
 <div align="center">
-  <video src="[https://youtube.com/shorts/05BYc8R48Fk" controls="controls" style="max-width: 100%;">
+  <video src="https://user-images.githubusercontent.com/placeholder-video.mp4" controls="controls" style="max-width: 100%;">
     Your browser does not support the video tag.
   </video>
   <br>
   <em>(Click to play audio explanation)</em>
 </div>
 
-> **Note**: If the video above doesn't play, you can [watch the demo here]((https://youtube.com/shorts/05BYc8R48Fk)).
+> **Note**: If the video above doesn't play, you can [watch the demo here]([https://your-video-link.com](https://www.youtube.com/shorts/05BYc8R48Fk)).
 
 ---
 
