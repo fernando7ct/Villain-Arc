@@ -68,7 +68,7 @@ See Villain Arc in action. This video walks you through creating an account, log
   <em>(Click to play audio explanation)</em>
 </div>
 
-> **Note**: If the video above doesn't play, you can [watch the demo here]([https://your-video-link.com](https://www.youtube.com/shorts/05BYc8R48Fk)).
+> **Note**: If the video above doesn't play, you can https://www.youtube.com/shorts/05BYc8R48Fk.
 
 ---
 
