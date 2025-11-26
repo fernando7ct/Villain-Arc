@@ -53,12 +53,7 @@ The entire app is built with **SwiftUI**, Apple's modern declarative framework.
 
 ## 🎥 Video Demonstration
 
-See Villain Arc in action. This video walks you through creating an account, logging a workout, and checking your stats.
-
-<!-- 
-    TODO: Replace the src attribute below with your actual video URL. 
-    You can use a YouTube link, a link to a video file in your repo, or an embedded MP4.
--->
+See Villain Arc in action. This video walks you through logging a workout, and checking your previous stats.
 
 <div align="center">
   <video src="https://www.youtube.com/shorts/05BYc8R48Fk" controls="controls" style="max-width: 100%;">
