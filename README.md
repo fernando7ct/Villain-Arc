@@ -63,7 +63,7 @@ See Villain Arc in action. This video walks you through logging a workout, and c
   <em>(Click to play audio explanation)</em>
 </div>
 
-> **Note**: If the video above doesn't play, you can https://www.youtube.com/shorts/05BYc8R48Fk.
+> **Note**: If the video above doesn't play, you can click this link: https://www.youtube.com/shorts/05BYc8R48Fk.
 
 ---
 
